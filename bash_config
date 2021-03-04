@@ -1,0 +1,2 @@
+# Git aliases
+gfp="git fetch --prune"
