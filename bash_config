@@ -1,3 +1,3 @@
 # Git aliases
-gfp="git fetch --prune"
-gdb="git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d"
+alias gfp="git fetch --prune"
+alias gdb="git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d"
