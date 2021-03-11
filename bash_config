@@ -1,3 +1,6 @@
 # Git aliases
 alias gfp="git fetch --prune"
 alias gdb="git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d"
+alias gu="git fetch --prune && git merge && gdb"
+alias gai="git add -i"
+
