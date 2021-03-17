@@ -1,3 +1,5 @@
+set -e
+
 # Git aliases
 alias gfp="git fetch --prune"
 alias gdb="git branch --merged | egrep -v \"(^\*|master|dev|main)\" | xargs git branch -d"
@@ -9,7 +11,7 @@ function npm-scripts()
     if ! command -v jq &> /dev/null
     then
         echo "Must have jq installed (brew install jq)"
-        exit
+        return
     fi
 
     [ -f package.json ] && cat package.json | jq {'scripts'}
