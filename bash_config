@@ -1,4 +1,7 @@
-set -e
+
+# Exports
+export ELKDANGER=~/.elkdanger
+export EDITOR=vim
 
 # Git aliases
 alias gfp="git fetch --prune"
@@ -6,13 +9,16 @@ alias gdb="git branch --merged | egrep -v \"(^\*|master|dev|main)\" | xargs git 
 alias gu="git fetch --prune && git merge && gdb"
 alias gai="git add -i"
 
-function npm-scripts()
-{
-    if ! command -v jq &> /dev/null
-    then
-        echo "Must have jq installed (brew install jq)"
-        return
-    fi
+mktouch() { 
+  mkdir -p $(dirname $1) && touch $1; 
+}
 
-    [ -f package.json ] && cat package.json | jq {'scripts'}
+npm-scripts() {
+  if ! command -v jq &> /dev/null
+  then
+      echo "Must have jq installed (brew install jq)"
+      return
+  fi
+
+  [ -f package.json ] && cat package.json | jq {'scripts'}
 }
