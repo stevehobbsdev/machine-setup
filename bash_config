@@ -1,16 +1,15 @@
 # Setup
-
 HOME=/Users/$USER
 Z_HOME=$HOME/zed
 
 # Install Homebrew
-if test ! $(which brew); then
+if ! test brew &> /dev/null; then
   echo "Installing homebrew..."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # Install jq
-if test ! $(which jq); then
+if ! test jq &> /dev/null; then
   echo "Installing jq"
   brew install jq
 fi
@@ -28,15 +27,21 @@ fi
 
 source $HOME/zed/z.sh
 
-# Setup git
+# Install GitHub CLI
+if ! type gh &> /dev/null; then
+  echo "Installing GitHub CLI"
+  brew install gh
+fi
 
+# Setup git
 git config --global user.name "Steve Hobbs"
 git config --global user.email "steve.hobbs@hey.com"
+
+# ZSH config
 
 # Exports
 export ELKDANGER=~/.elkdanger
 export EDITOR=code
-export ZSH_THEME="af-magic"
 
 # Git aliases
 alias gfp="git fetch --prune"
