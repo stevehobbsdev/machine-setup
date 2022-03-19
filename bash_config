@@ -28,6 +28,11 @@ fi
 
 source $HOME/zed/z.sh
 
+# Setup git
+
+git config --global user.name "Steve Hobbs"
+git config --global user.email "steve.hobbs@hey.com"
+
 # Exports
 export ELKDANGER=~/.elkdanger
 export EDITOR=code
