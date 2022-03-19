@@ -1,7 +1,37 @@
+# Setup
+
+HOME=/Users/$USER
+Z_HOME=$HOME/zed
+
+# Install Homebrew
+if test ! $(which brew); then
+  echo "Installing homebrew..."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+# Install jq
+if test ! $(which jq); then
+  echo "Installing jq"
+  brew install jq
+fi
+
+# Install z
+if [ ! -d "$Z_HOME" ]; then
+  echo "Installing rupa/z"
+  git clone https://github.com/rupa/z $Z_HOME
+else
+  echo "Updating rupa/z"
+  pushd $Z_HOME > /dev/null
+  git pull
+  popd > /dev/null
+fi
+
+source $HOME/zed/z.sh
 
 # Exports
 export ELKDANGER=~/.elkdanger
-export EDITOR=vim
+export EDITOR=code
+export ZSH_THEME="af-magic"
 
 # Git aliases
 alias gfp="git fetch --prune"
