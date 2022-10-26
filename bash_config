@@ -62,3 +62,9 @@ npm-scripts() {
 
   [ -f package.json ] && cat package.json | jq {'scripts'}
 }
+
+function open-branch {
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  echo "Current branch: $BRANCH"
+  gh browse -b $BRANCH
+}
