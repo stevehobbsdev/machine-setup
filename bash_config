@@ -1,5 +1,4 @@
 # Setup
-HOME=/Users/$USER
 Z_HOME=$HOME/zed
 
 # Install Homebrew
