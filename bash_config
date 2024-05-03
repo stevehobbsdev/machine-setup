@@ -1,6 +1,6 @@
-# Setup
-Z_HOME=$HOME/zed
+#!/usr/bin/env bash
 
+# Setup
 # Install Homebrew
 if ! type "brew" &> /dev/null; then
   echo "Installing homebrew..."
@@ -16,15 +16,15 @@ fi
 # Install z
 if [ ! -d "$Z_HOME" ]; then
   echo "Installing rupa/z"
-  git clone https://github.com/rupa/z $Z_HOME
+  git clone https://github.com/rupa/z "$Z_HOME"
 else
   echo "Updating rupa/z"
-  pushd $Z_HOME > /dev/null
+  pushd "$Z_HOME" > /dev/null || exit
   git pull
-  popd > /dev/null
+  popd > /dev/null || exit
 fi
 
-source $HOME/zed/z.sh
+source "$HOME/zed/z.sh"
 
 # Install GitHub CLI
 if ! type gh &> /dev/null; then
@@ -48,8 +48,11 @@ alias gdb="git for-each-ref --format '%(refname:short) %(upstream:track)' | awk 
 alias gu="git fetch --prune && git merge && gdb"
 alias gai="git add -i"
 
+# Other dependencies
+make deps
+
 mktouch() { 
-  mkdir -p $(dirname $1) && touch $1; 
+  mkdir -p "$(dirname "$1")" && touch "$1"; 
 }
 
 npm-scripts() {
@@ -65,5 +68,5 @@ npm-scripts() {
 function open-branch {
   BRANCH=$(git rev-parse --abbrev-ref HEAD)
   echo "Current branch: $BRANCH"
-  gh browse -b $BRANCH
+  gh browse -b "$BRANCH"
 }
