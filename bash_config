@@ -24,6 +24,9 @@ else
   popd > /dev/null || exit
 fi
 
+# Install VSCode
+brew install --cask visual-studio-code
+
 source "$HOME/zed/z.sh"
 
 # Install GitHub CLI
