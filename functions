@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+function mktouch() { 
+  mkdir -p "$(dirname "$1")" && touch "$1"; 
+}
+
+function npm-scripts() {
+  if ! command -v jq &> /dev/null
+  then
+      echo "Must have jq installed (brew install jq)"
+      return
+  fi
+
+  [ -f package.json ] && cat package.json | jq {'scripts'}
+}
+
+function open-branch {
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  echo "Current branch: $BRANCH"
+  gh browse -b "$BRANCH"
+}

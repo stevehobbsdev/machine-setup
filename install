@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Copy the VIM profile
+if [[ ! -L "$HOME/.vimrc" ]]; then
+  ln -s "$(pwd)/.vimrc" ~
+fi
+
+# Install Homebrew
+if ! type "brew" &> /dev/null; then
+  echo "Installing homebrew..."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+# Install jq
+if ! type "jq" &> /dev/null; then
+  echo "Installing jq"
+  brew install jq
+fi
+
+# Install z
+if [ ! -d "$Z_HOME" ]; then
+  echo "Installing rupa/z"
+  git clone https://github.com/rupa/z "$Z_HOME"
+else
+  echo "Updating rupa/z"
+  pushd "$Z_HOME" > /dev/null || exit
+  git pull
+  popd > /dev/null || exit
+fi
+
+# Install GitHub CLI
+if ! type gh &> /dev/null; then
+  echo "Installing GitHub CLI"
+  brew install gh
+fi
+
+# NVM
+if [[ ! -d "$HOME/.nvm" ]]; then
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+fi
+
+# Install VSCode
+brew install --cask visual-studio-code
+
+# Shellcheck
+brew install shellcheck

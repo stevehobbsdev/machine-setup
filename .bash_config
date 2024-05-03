@@ -1,0 +1,28 @@
+
+if [[ -d "$HOME/zed" ]]; then
+  source "$HOME/zed/z.sh"
+fi
+
+if [[ -d "$HOME/.nvm" ]]; then
+  export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+  echo "NVM node version: $(nvm current)"
+
+fi 
+
+# Setup git
+git config --global user.name "Steve Hobbs"
+git config --global user.email "steve.hobbs@hey.com"
+
+# Exports
+export ELKDANGER=~/.elkdanger
+export EDITOR=code
+
+# Git aliases
+alias gfp="git fetch --prune"
+alias gdb="git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '\$2 == \"[gone]\" {print \$1}' | xargs -r git branch -D"
+alias gu="git fetch --prune && git merge && gdb"
+alias gai="git add -i"
+
+source functions

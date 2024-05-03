@@ -1,8 +1,5 @@
-
-.PHONY: deps
-deps:
-	brew install shellcheck
+SHELL := /bin/bash
 
 .PHONY: check
 check:
-	shellcheck bash_config
+	shellcheck .bash_config install functions
