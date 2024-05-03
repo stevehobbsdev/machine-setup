@@ -2,13 +2,13 @@
 Z_HOME=$HOME/zed
 
 # Install Homebrew
-if ! test brew &> /dev/null; then
+if ! type "brew" &> /dev/null; then
   echo "Installing homebrew..."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # Install jq
-if ! test jq &> /dev/null; then
+if ! type "jq" &> /dev/null; then
   echo "Installing jq"
   brew install jq
 fi
