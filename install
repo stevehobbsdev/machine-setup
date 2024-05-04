@@ -41,17 +41,16 @@ if [[ ! -d "$HOME/.nvm" ]]; then
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 fi
 
-# ZSH tools
-brew install zsh-autocomplete
+# Tools
+brew install zsh-autocomplete libpq docker shellcheck
 
 # Install VSCode
 brew install --cask visual-studio-code
 
-# Langs
-brew install go rbenv
-
-# Shellcheck
-brew install shellcheck
+# Langs/frameworks
+brew install go rbenv libpq
+rbenv init
 
 # Spotify
 brew install --cask spotify
+

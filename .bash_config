@@ -35,3 +35,5 @@ alias gdb="git for-each-ref --format '%(refname:short) %(upstream:track)' | awk 
 alias gu="git fetch --prune && git merge && gdb"
 alias gai="git add -i"
 
+# rbenv
+eval "$(rbenv init - bash)"
