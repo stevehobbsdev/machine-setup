@@ -2,4 +2,4 @@ SHELL := /bin/bash
 
 .PHONY: check
 check:
-	shellcheck .bash_config install functions
+	shellcheck .bash_config install functions environment

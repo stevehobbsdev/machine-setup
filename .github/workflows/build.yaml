@@ -16,4 +16,4 @@ jobs:
         env:
           SHELLCHECK_OPTS: --severity=error
         with:
-          additional_files: 'install functions .bash_config'
+          additional_files: 'install functions .bash_config environment'

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
+source "$DIR/environment"
 
 if [[ -d "$HOMEBREW_PREFIX/share/zsh-autocomplete" ]]; then
   source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
@@ -20,12 +23,8 @@ fi
 git config --global user.name "Steve Hobbs"
 git config --global user.email "steve.hobbs@hey.com"
 
-# Exports
-export ELKDANGER=~/.elkdanger
-export EDITOR=code
-
 # Functions
-source functions
+source "$DIR/functions"
 
 # Git alias
 alias gfp="git fetch --prune"

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export ELKDANGER=~/.elkdanger
+export EDITOR=code
