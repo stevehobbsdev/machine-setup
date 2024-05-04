@@ -18,6 +18,8 @@ if ! type "jq" &> /dev/null; then
 fi
 
 # Install z
+export Z_HOME="$HOME/zed"
+
 if [ ! -d "$Z_HOME" ]; then
   echo "Installing rupa/z"
   git clone https://github.com/rupa/z "$Z_HOME"
@@ -39,8 +41,14 @@ if [[ ! -d "$HOME/.nvm" ]]; then
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 fi
 
+# ZSH tools
+brew install zsh-autocomplete
+
 # Install VSCode
 brew install --cask visual-studio-code
 
 # Shellcheck
 brew install shellcheck
+
+# Spotify
+brew install --cask spotify
