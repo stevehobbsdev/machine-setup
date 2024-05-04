@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 if [[ -d "$HOME/zed" ]]; then
   source "$HOME/zed/z.sh"
