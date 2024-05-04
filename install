@@ -47,6 +47,9 @@ brew install zsh-autocomplete
 # Install VSCode
 brew install --cask visual-studio-code
 
+# Langs
+brew install go rbenv
+
 # Shellcheck
 brew install shellcheck
 
