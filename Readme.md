@@ -1,16 +1,21 @@
 ## System Config Setup
 
-Clone this gist to ~/.elkdanger
-
-### Install VIM config
+Clone this gist to ~/.elkdanger:
 
 ```
-ln -s $(pwd)/.vimrc ~
+git clone https://github.com/stevehobbsdev/machine-setup ~/.elkdanger
+```
+
+and run the install script:
+
+```
+cd ~/.elkdanger
+./install
 ```
 
 ### Load bash config
 
-Load `bash_config` along with your shell login profile.
+Load `bash_config` along with your shell login profile. Run manually, or copy into your ~/.zshrc file.
 
 ```
 source /Users/$USER/.elkdanger/bash_config
