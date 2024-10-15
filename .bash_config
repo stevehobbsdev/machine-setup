@@ -15,9 +15,8 @@ if [[ -d "$HOME/.nvm" ]]; then
   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-  echo "NVM node version: $(nvm current)"
-
-fi 
+  echo "node: $(nvm current)"
+fi
 
 # Setup git
 git config --global user.name "Steve Hobbs"
@@ -36,3 +35,5 @@ alias gai="git add -i"
 
 # rbenv
 eval "$(rbenv init - bash)"
+echo "ruby: $(ruby -v)"
+echo "go: $(go version)"
