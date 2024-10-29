@@ -42,7 +42,7 @@ if [[ ! -d "$HOME/.nvm" ]]; then
 fi
 
 # Tools
-brew install zsh-autocomplete libpq docker shellcheck
+brew install zsh-autocomplete zsh-syntax-highlighting libpq docker shellcheck
 
 # Install VSCode
 brew install --cask visual-studio-code

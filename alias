@@ -1,0 +1,7 @@
+# Git alias
+alias gfp="git fetch --prune"
+
+# shellcheck disable=SC2142
+alias gdb="git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '\$2 == \"[gone]\" {print \$1}' | xargs -r git branch -D"
+alias gu="git fetch --prune && git merge && gdb"
+alias gai="git add -i"
