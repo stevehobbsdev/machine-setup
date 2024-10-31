@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
 export ELKDANGER=~/.elkdanger
+
+# Provide a way to add apps to the path without adding them to the global path
+export PATH="$ELKDANGER/bin:$PATH"
+
 export EDITOR=vim
