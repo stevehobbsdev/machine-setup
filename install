@@ -1,56 +1,93 @@
 #!/usr/bin/env bash
+NO_DEV=false
+NO_APPS=false
 
-# Copy the VIM profile
-if [[ ! -L "$HOME/.vimrc" ]]; then
-  ln -s "$(pwd)/.vimrc" ~
-fi
+# Handle command line args
+for arg in "$@"; do
+  case $arg in
+    --no-dev)
+      NO_DEV=true
+      shift
+      ;;
+    --no-apps)
+      NO_APPS=true
+      shift
+      ;;
+  esac
+done
 
-# Install Homebrew
-if ! type "brew" &> /dev/null; then
-  echo "Installing homebrew..."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-fi
+# Install any development tools and programming language tools
+function install-dev() {
+  # Install GitHub CLI
+  if ! type gh &> /dev/null; then
+    echo "Installing GitHub CLI"
+    brew install gh
+  fi
 
-# Install jq
-if ! type "jq" &> /dev/null; then
-  echo "Installing jq"
-  brew install jq
-fi
+  # NVM
+  if [[ ! -d "$HOME/.nvm" ]]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  fi
 
-# Install z
-export Z_HOME="$HOME/zed"
+  # Langs/frameworks
+  brew install go rbenv libpq docker shellcheck
+  rbenv init
+}
 
-if [ ! -d "$Z_HOME" ]; then
-  echo "Installing rupa/z"
-  git clone https://github.com/rupa/z "$Z_HOME"
-else
-  echo "Updating rupa/z"
-  pushd "$Z_HOME" > /dev/null || exit
-  git pull
-  popd > /dev/null || exit
-fi
+# Install any applications needed
+function install-apps() {
+  # Browsers
+  brew install --cask google-chrome
 
-# Install GitHub CLI
-if ! type gh &> /dev/null; then
-  echo "Installing GitHub CLI"
-  brew install gh
-fi
+  # Development
+  brew install --cask visual-studio-code iterm2
 
-# NVM
-if [[ ! -d "$HOME/.nvm" ]]; then
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-fi
+  # Fun
+  brew install --cask spotify
+}
 
-# Tools
-brew install zsh-autocomplete zsh-syntax-highlighting libpq docker shellcheck
+function main() {
+  # Copy the VIM profile
+  if [[ ! -L "$HOME/.vimrc" ]]; then
+    ln -s "$(pwd)/.vimrc" ~
+  fi
 
-# Install VSCode
-brew install --cask visual-studio-code
+  # Install Homebrew
+  if ! type "brew" &> /dev/null; then
+    echo "Installing homebrew..."
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
 
-# Langs/frameworks
-brew install go rbenv libpq
-rbenv init
+  # Install jq
+  if ! type "jq" &> /dev/null; then
+    echo "Installing jq"
+    brew install jq
+  fi
 
-# Spotify
-brew install --cask spotify
+  # Install z
+  export Z_HOME="$HOME/zed"
 
+  if [ ! -d "$Z_HOME" ]; then
+    echo "Installing rupa/z"
+    git clone https://github.com/rupa/z "$Z_HOME"
+  else
+    echo "Updating rupa/z"
+    pushd "$Z_HOME" > /dev/null || exit
+    git pull
+    popd > /dev/null || exit
+  fi
+
+  # Tools
+  brew install zsh-autocomplete zsh-syntax-highlighting
+
+  if [ "$NO_DEV" == false ]; then
+    install-dev
+  fi
+
+  if [ "$NO_APPS" == false ]; then
+    install-apps
+  fi
+}
+
+# Run the installer
+main
