@@ -87,6 +87,18 @@ function main() {
   if [ "$NO_APPS" == false ]; then
     install-apps
   fi
+
+  # Get the full path of .bash_config in the current folder
+  BASH_CONFIG_PATH="$(pwd)/.bash_config"
+  echo "The full path of .bash_config is: $BASH_CONFIG_PATH"
+
+  # Add .bash_config to ~/.zshrc if not already added
+  if ! grep -Fxq "source $BASH_CONFIG_PATH" "$HOME/.zshrc"; then
+    echo "source $BASH_CONFIG_PATH" >> "$HOME/.zshrc"
+    echo ".bash_config has been added to ~/.zshrc"
+  else
+    echo ".bash_config is already sourced in ~/.zshrc"
+  fi
 }
 
 # Run the installer
