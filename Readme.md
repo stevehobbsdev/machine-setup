@@ -1,6 +1,6 @@
 ## System Config Setup
 
-Clone this gist to ~/.elkdanger:
+Clone this gist to something like ~/.elkdanger:
 
 ```
 git clone https://github.com/stevehobbsdev/machine-setup ~/.elkdanger
