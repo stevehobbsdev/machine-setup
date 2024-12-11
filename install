@@ -80,6 +80,11 @@ function main() {
   # Tools
   brew install zsh-autocomplete zsh-syntax-highlighting pre-commit neovim
 
+  # Use .vimrc in neovim
+  if [ ! -e "$HOME/.config/nvim/init.vim" ]; then
+    cp "$(pwd)/support/init.vim" "$HOME/.config/nvim/init.vim" 
+  fi
+
   if [ "$NO_DEV" == false ]; then
     install-dev
   fi
