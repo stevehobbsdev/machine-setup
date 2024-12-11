@@ -30,4 +30,7 @@ echo "ruby: $(ruby -v)"
 echo "go: $(go version)"
 
 # Syntax highlighting
-echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+if ! grep -Fq "zsh-syntax-highlighting.zsh" "$HOME/.zshrc"; then
+  echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+fi
+

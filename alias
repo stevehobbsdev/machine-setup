@@ -9,3 +9,6 @@ alias gai="git add -i"
 # vim
 alias vim=nvim
 
+# Terraform
+alias tf=terraform
+
