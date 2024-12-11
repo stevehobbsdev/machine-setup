@@ -7,5 +7,5 @@ alias gu="git fetch --prune && git merge && gdb"
 alias gai="git add -i"
 
 # vim
-alias vim=neovim
+alias vim=nvim
 
