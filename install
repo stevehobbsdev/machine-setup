@@ -78,7 +78,7 @@ function main() {
   fi
 
   # Tools
-  brew install zsh-autocomplete zsh-syntax-highlighting
+  brew install zsh-autocomplete zsh-syntax-highlighting pre-commit neovim
 
   if [ "$NO_DEV" == false ]; then
     install-dev
