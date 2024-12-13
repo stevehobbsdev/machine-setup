@@ -104,6 +104,13 @@ function main() {
   else
     echo ".bash_config is already sourced in ~/.zshrc"
   fi
+
+  # Add ZSH plugins to ~/.zshrc
+  if ! grep -Fq "zsh-autocomplete" "$HOME/.zshr"; then
+    if [[ -d "$HOMEBREW_PREFIX/share/zsh-autocomplete" ]]; then
+      echo "source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh" >> "$HOME/.zshrc"
+    fi
+  fi
 }
 
 # Run the installer

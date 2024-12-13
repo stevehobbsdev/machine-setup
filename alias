@@ -1,3 +1,5 @@
+alias ob=open-branch
+
 # Git alias
 alias gfp="git fetch --prune"
 

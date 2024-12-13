@@ -4,10 +4,6 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$DIR/environment"
 source "$DIR/alias"
 
-#if [[ -d "$HOMEBREW_PREFIX/share/zsh-autocomplete" ]]; then
-#  source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-#fi
-
 if [[ -d "$HOME/zed" ]]; then
   source "$HOME/zed/z.sh"
 fi
