@@ -30,7 +30,7 @@ function install-dev() {
   fi
 
   # Langs/frameworks
-  brew install go rbenv libpq docker shellcheck
+  brew install go rbenv libpq docker shellcheck python pipx
   rbenv init
 }
 
