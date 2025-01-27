@@ -30,3 +30,6 @@ if ! grep -Fq "zsh-syntax-highlighting.zsh" "$HOME/.zshrc"; then
   echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 fi
 
+# Auto suggestions
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+

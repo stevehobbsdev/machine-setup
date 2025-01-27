@@ -24,14 +24,10 @@ function install-dev() {
     brew install gh
   fi
 
-  # NVM
-  if [[ ! -d "$HOME/.nvm" ]]; then
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-  fi
-
   # Langs/frameworks
-  brew install go rbenv libpq docker shellcheck python pipx
-  rbenv init
+  brew install go mise libpq docker shellcheck python pipx
+
+  echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
 }
 
 # Install any applications needed
@@ -78,7 +74,7 @@ function main() {
   fi
 
   # Tools
-  brew install zsh-autocomplete zsh-syntax-highlighting pre-commit neovim
+  brew install zsh-autosuggestions zsh-syntax-highlighting pre-commit neovim
 
   # Use .vimrc in neovim
   if [ ! -e "$HOME/.config/nvim/init.vim" ]; then
@@ -106,9 +102,9 @@ function main() {
   fi
 
   # Add ZSH plugins to ~/.zshrc
-  if ! grep -Fq "zsh-autocomplete" "$HOME/.zshr"; then
-    if [[ -d "$HOMEBREW_PREFIX/share/zsh-autocomplete" ]]; then
-      echo "source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh" >> "$HOME/.zshrc"
+  if ! grep -Fq "zsh-autosuggestions" "$HOME/.zshrc"; then
+    if [[ -d "$HOMEBREW_PREFIX/share/zsh-autosuggestions" ]]; then
+      echo "source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" >> "$HOME/.zshrc"
     fi
   fi
 }
