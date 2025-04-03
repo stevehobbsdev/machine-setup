@@ -7,6 +7,9 @@ alias gfp="git fetch --prune"
 alias gdb="git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '\$2 == \"[gone]\" {print \$1}' | xargs -r git branch -D"
 alias gu="git fetch --prune && git merge && gdb"
 alias gai="git add -i"
+alias prv="gh pr view -w"
+alias prs="gh search prs --author=@me --state open"
+alias all_prs="gh search prs --author=@me"
 
 # vim
 alias vim=nvim
@@ -16,4 +19,12 @@ alias tf=terraform
 
 # Python
 alias pip=pipx
+
+# Obsidian / notes
+OBSIDIAN_URI=obsidian://
+OBS_VAULT_PERSONAL=~/dev/stevehobbsdev/.notes/Personal
+
+alias notes="pushd $OBS_VAULT_PERSONAL; nvim .; pushd"
+alias obs="open $OBSIDIAN_URI"
+alias onotes="open $OBSIDIAN_URI$OBS_VAULT_PERSONAL"
 
