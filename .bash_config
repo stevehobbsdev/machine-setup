@@ -11,6 +11,9 @@ fi
 # Functions
 source "$DIR/functions"
 
+eval "$(mise activate zsh)"
+eval "$(starship init zsh)"
+
 # rbenv
 echo "ruby: $(ruby -v)"
 
@@ -18,10 +21,8 @@ echo "ruby: $(ruby -v)"
 echo "go: $(go version)"
 
 # Syntax highlighting
-if ! grep -Fq "zsh-syntax-highlighting.zsh" "$HOME/.zshrc"; then
-  echo "source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
-fi
+source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # Auto suggestions
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 

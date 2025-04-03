@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 NO_DEV=false
 NO_APPS=false
 
@@ -21,32 +22,32 @@ function install-dev() {
   # Install GitHub CLI
   if ! type gh &> /dev/null; then
     echo "Installing GitHub CLI"
-    brew install gh
+    brew install --quiet gh
   fi
 
-  # Langs/frameworks
-  brew install go mise libpq docker shellcheck python pipx
+  brew install --quiet mise libpq docker shellcheck python pipx
 
-  echo 'eval "$(mise activate zsh)"' >> ~/.zshrc
+  mise use -g go@latest
+  mise use -g ruby@latest
+  mise use -g node@latest
 }
 
 # Install any applications needed
 function install-apps() {
   # Browsers
-  brew install --cask google-chrome
+  brew install --quiet --cask google-chrome
 
   # Development
-  brew install --cask visual-studio-code iterm2
+  brew install --quiet --cask visual-studio-code 
+  brew install --quiet pre-commit
 
   # Fun
-  brew install --cask spotify
+  brew install --quiet --cask spotify
 }
 
 function main() {
-  # Copy the VIM profile
-  if [[ ! -L "$HOME/.vimrc" ]]; then
-    ln -s "$(pwd)/.vimrc" ~
-  fi
+  # make sure config dir exists
+  [[ -d "$HOME/.config" ]] || mkdir "$HOME/.config"
 
   # Install Homebrew
   if ! type "brew" &> /dev/null; then
@@ -59,6 +60,10 @@ function main() {
     echo "Installing jq"
     brew install jq
   fi
+
+  # Tools
+  [[ -d "/Applications/iTerm.app" ]] || brew install --cask --quiet iterm2
+  brew install --quiet zsh-autosuggestions zsh-syntax-highlighting starship neovim
 
   # Install z
   export Z_HOME="$HOME/zed"
@@ -73,14 +78,12 @@ function main() {
     popd > /dev/null || exit
   fi
 
-  # Tools
-  brew install zsh-autosuggestions zsh-syntax-highlighting pre-commit neovim
-
-  # Use .vimrc in neovim
-  if [ ! -e "$HOME/.config/nvim/init.vim" ]; then
-    cp "$(pwd)/support/init.vim" "$HOME/.config/nvim/init.vim" 
+  # nvim config
+  if [[ ! -L "$HOME/.config/nvim/init.lua" ]]; then
+    ln -s "$(pwd)/assets/init.lua" "$HOME/.config/"
   fi
 
+  # Optional installation...
   if [ "$NO_DEV" == false ]; then
     install-dev
   fi
@@ -91,21 +94,11 @@ function main() {
 
   # Get the full path of .bash_config in the current folder
   BASH_CONFIG_PATH="$(pwd)/.bash_config"
-  echo "The full path of .bash_config is: $BASH_CONFIG_PATH"
 
   # Add .bash_config to ~/.zshrc if not already added
   if ! grep -Fxq "source $BASH_CONFIG_PATH" "$HOME/.zshrc"; then
     echo "source $BASH_CONFIG_PATH" >> "$HOME/.zshrc"
-    echo ".bash_config has been added to ~/.zshrc"
-  else
-    echo ".bash_config is already sourced in ~/.zshrc"
-  fi
-
-  # Add ZSH plugins to ~/.zshrc
-  if ! grep -Fq "zsh-autosuggestions" "$HOME/.zshrc"; then
-    if [[ -d "$HOMEBREW_PREFIX/share/zsh-autosuggestions" ]]; then
-      echo "source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" >> "$HOME/.zshrc"
-    fi
+    echo "$(pwd)/.bash_config has been added to ~/.zshrc"
   fi
 }
 
