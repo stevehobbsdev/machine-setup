@@ -3,6 +3,14 @@
 INSTALL_DEV=false
 INSTALL_APPS=false
 
+# Detect OS
+OS="$(uname -s)"
+IS_MACOS=false
+
+if [[ "$OS" == "Darwin" ]]; then
+  IS_MACOS=true
+fi
+
 # Handle command line args
 for arg in "$@"; do
   case $arg in
@@ -34,6 +42,11 @@ function install-dev() {
 
 # Install any applications needed
 function install-apps() {
+  if [[ "$IS_MACOS" != true ]]; then
+    echo "Error: install-apps can only be run on macOS"
+    return 1
+  fi
+
   # Browsers
   brew install --quiet --cask google-chrome
 
@@ -51,19 +64,44 @@ function main() {
 
   # Install Homebrew
   if ! type "brew" &> /dev/null; then
-    echo "Installing homebrew..."
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    if [[ "$IS_MACOS" == true ]]; then
+      echo "Installing homebrew..."
+      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    else
+      echo "Warning: Homebrew installation skipped (not on macOS)"
+    fi
   fi
 
   # Install jq
   if ! type "jq" &> /dev/null; then
     echo "Installing jq"
-    brew install jq
+    if [[ "$IS_MACOS" == true ]]; then
+      brew install jq
+    else
+      # Try apt-get for Ubuntu/Debian systems
+      if command -v apt-get &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y jq
+      else
+        echo "Warning: Could not install jq automatically on this system"
+      fi
+    fi
   fi
 
   # Tools
-  [[ -d "/Applications/iTerm.app" ]] || brew install --cask --quiet iterm2
-  brew install --quiet zsh-autosuggestions zsh-syntax-highlighting starship neovim
+  if [[ "$IS_MACOS" == true ]]; then
+    [[ -d "/Applications/iTerm.app" ]] || brew install --cask --quiet iterm2
+    brew install --quiet zsh-autosuggestions zsh-syntax-highlighting starship neovim
+  else
+    echo "Warning: iTerm2 installation skipped (not on macOS)"
+    # Try to install available tools on non-macOS systems
+    if command -v apt-get &> /dev/null; then
+      sudo apt-get update
+      sudo apt-get install -y zsh neovim
+      echo "Note: zsh-autosuggestions, zsh-syntax-highlighting, and starship may need manual installation on this system"
+    else
+      echo "Warning: Could not install tools automatically on this system"
+    fi
+  fi
 
   # Install z
   export Z_HOME="$HOME/zed"
