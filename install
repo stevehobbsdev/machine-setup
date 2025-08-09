@@ -34,11 +34,16 @@ function install-dev() {
       brew install --quiet gh
     fi
 
+    # Install other development tools
+    echo "Installing development tools with brew..."
     brew install --quiet mise libpq docker shellcheck
 
-    mise use -g go@latest
-    mise use -g ruby@latest
-    mise use -g node@latest
+    # Set up language runtimes
+    if type mise &> /dev/null; then
+      mise use -g go@latest
+      mise use -g ruby@latest
+      mise use -g node@latest
+    fi
   else
     echo "Installing development tools for non-macOS system..."
     
@@ -48,9 +53,18 @@ function install-dev() {
       if command -v apt-get &> /dev/null; then
         # Add GitHub CLI repository and install
         type -p curl >/dev/null || sudo apt-get update && sudo apt-get install curl -y
-        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        
+        # Only add keyring if not already present
+        if [[ ! -f "/usr/share/keyrings/githubcli-archive-keyring.gpg" ]]; then
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+        fi
+        
+        # Only add repository if not already present
+        if [[ ! -f "/etc/apt/sources.list.d/github-cli.list" ]]; then
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        fi
+        
         sudo apt-get update && sudo apt-get install gh -y
       else
         echo "Warning: Could not install GitHub CLI automatically on this system"
@@ -60,10 +74,43 @@ function install-dev() {
     # Install other development tools
     if command -v apt-get &> /dev/null; then
       sudo apt-get update
-      sudo apt-get install -y docker.io shellcheck
       
-      echo "Note: mise, libpq, and language runtimes may need manual installation on this system"
-      echo "Consider installing mise from https://mise.jdx.dev/ for language runtime management"
+      # Install docker if not already installed
+      if ! type docker &> /dev/null; then
+        echo "Installing docker..."
+        sudo apt-get install -y docker.io
+      fi
+      
+      # Install shellcheck if not already installed
+      if ! type shellcheck &> /dev/null; then
+        echo "Installing shellcheck..."
+        sudo apt-get install -y shellcheck
+      fi
+      
+      # Install mise
+      if ! type mise &> /dev/null; then
+        echo "Installing mise..."
+        curl https://mise.run | sh
+        # Add mise to PATH for current session
+        export PATH="$HOME/.local/bin:$PATH"
+        
+        # Add ~/.local/bin to PATH in ~/.zshrc if not already added
+        if ! grep -Fxq 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.zshrc"; then
+          echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zshrc"
+          echo "~/.local/bin has been added to PATH in ~/.zshrc"
+        fi
+      fi
+      
+      # Install language runtimes with mise if available
+      if type mise &> /dev/null; then
+        mise use -g go@latest
+        mise use -g ruby@latest
+        mise use -g node@latest
+      else
+        echo "Note: Could not install mise, language runtimes need manual installation"
+      fi
+      
+      echo "Note: libpq may need manual installation on this system"
     else
       echo "Warning: Could not install development tools automatically on this system"
     fi
@@ -78,14 +125,27 @@ function install-apps() {
   fi
 
   # Browsers
-  brew install --quiet --cask google-chrome
+  if [[ ! -d "/Applications/Google Chrome.app" ]]; then
+    echo "Installing Google Chrome..."
+    brew install --quiet --cask google-chrome
+  fi
 
   # Development
-  brew install --quiet --cask visual-studio-code 
-  brew install --quiet pre-commit
+  if [[ ! -d "/Applications/Visual Studio Code.app" ]]; then
+    echo "Installing Visual Studio Code..."
+    brew install --quiet --cask visual-studio-code
+  fi
+  
+  if ! type pre-commit &> /dev/null; then
+    echo "Installing pre-commit..."
+    brew install --quiet pre-commit
+  fi
 
   # Fun
-  brew install --quiet --cask spotify
+  if [[ ! -d "/Applications/Spotify.app" ]]; then
+    echo "Installing Spotify..."
+    brew install --quiet --cask spotify
+  fi
 }
 
 function main() {
@@ -120,13 +180,43 @@ function main() {
   # Tools
   if [[ "$IS_MACOS" == true ]]; then
     [[ -d "/Applications/iTerm.app" ]] || brew install --cask --quiet iterm2
-    brew install --quiet zsh-autosuggestions zsh-syntax-highlighting starship neovim
+    
+    # Install zsh plugins and tools individually
+    if ! brew list zsh-autosuggestions &> /dev/null; then
+      echo "Installing zsh-autosuggestions..."
+      brew install --quiet zsh-autosuggestions
+    fi
+    
+    if ! brew list zsh-syntax-highlighting &> /dev/null; then
+      echo "Installing zsh-syntax-highlighting..."
+      brew install --quiet zsh-syntax-highlighting
+    fi
+    
+    if ! type starship &> /dev/null; then
+      echo "Installing starship..."
+      brew install --quiet starship
+    fi
+    
+    if ! type nvim &> /dev/null; then
+      echo "Installing neovim..."
+      brew install --quiet neovim
+    fi
   else
     echo "Warning: iTerm2 installation skipped (not on macOS)"
     # Try to install available tools on non-macOS systems
     if command -v apt-get &> /dev/null; then
       sudo apt-get update
-      sudo apt-get install -y zsh neovim
+      
+      if ! type zsh &> /dev/null; then
+        echo "Installing zsh..."
+        sudo apt-get install -y zsh
+      fi
+      
+      if ! type nvim &> /dev/null; then
+        echo "Installing neovim..."
+        sudo apt-get install -y neovim
+      fi
+      
       echo "Note: zsh-autosuggestions, zsh-syntax-highlighting, and starship may need manual installation on this system"
     else
       echo "Warning: Could not install tools automatically on this system"
@@ -148,7 +238,8 @@ function main() {
 
   # nvim config
   if [[ ! -L "$HOME/.config/nvim/init.lua" ]]; then
-    ln -s "$(pwd)/assets/init.lua" "$HOME/.config/"
+    echo "Setting up nvim config..."
+    ln -s "$(pwd)/assets/init.lua" "$HOME/.config/nvim/init.lua"
   fi
 
   # Optional installation...
