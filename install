@@ -7,6 +7,7 @@ INSTALL_APPS=false
 GO_VERSION="1.24.6"
 RUBY_VERSION="3.4.5"
 NODE_VERSION="24.5.0"
+RUST_VERSION="1.89.0"
 
 # Detect OS
 OS="$(uname -s)"
@@ -48,6 +49,7 @@ function install-dev() {
       mise use -g go@${GO_VERSION}
       mise use -g ruby@${RUBY_VERSION}
       mise use -g node@${NODE_VERSION}
+      mise use -g rust@${RUST_VERSION}
     fi
   else
     echo "Installing development tools for non-macOS system..."
@@ -111,6 +113,7 @@ function install-dev() {
         mise use -g go@${GO_VERSION}
         mise use -g ruby@${RUBY_VERSION}
         mise use -g node@${NODE_VERSION}
+        mise use -g rust@${RUST_VERSION}
       else
         echo "Note: Could not install mise, language runtimes need manual installation"
       fi
