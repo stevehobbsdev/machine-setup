@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-NO_DEV=false
-NO_APPS=false
+INSTALL_DEV=false
+INSTALL_APPS=false
 
 # Handle command line args
 for arg in "$@"; do
   case $arg in
-    --no-dev)
-      NO_DEV=true
+    --dev)
+      INSTALL_DEV=true
       shift
       ;;
-    --no-apps)
-      NO_APPS=true
+    --apps)
+      INSTALL_APPS=true
       shift
       ;;
   esac
@@ -84,11 +84,11 @@ function main() {
   fi
 
   # Optional installation...
-  if [ "$NO_DEV" == false ]; then
+  if [ "$INSTALL_DEV" == true ]; then
     install-dev
   fi
 
-  if [ "$NO_APPS" == false ]; then
+  if [ "$INSTALL_APPS" == true ]; then
     install-apps
   fi
 
