@@ -42,7 +42,7 @@ function install-dev() {
 
     # Install other development tools
     echo "Installing development tools with brew..."
-    brew install --quiet mise libpq docker shellcheck
+    brew install --quiet mise docker shellcheck
 
     # Set up language runtimes
     if type mise &> /dev/null; then
@@ -118,9 +118,25 @@ function install-dev() {
         echo "Note: Could not install mise, language runtimes need manual installation"
       fi
       
-      echo "Note: libpq may need manual installation on this system"
     else
       echo "Warning: Could not install development tools automatically on this system"
+    fi
+  fi
+  
+  # Install libpq across all platforms
+  if [[ "$IS_MACOS" == true ]]; then
+    if ! brew list libpq &> /dev/null; then
+      echo "Installing libpq on macOS..."
+      brew install --quiet libpq
+      # Ensure libpq binaries are linked to PATH
+      brew link --force libpq
+    fi
+  else
+    if command -v apt-get &> /dev/null; then
+      echo "Installing libpq on Linux..."
+      sudo apt-get update && sudo apt-get install -y libpq-dev
+    else
+      echo "Warning: Could not install libpq automatically on this system"
     fi
   fi
 }
