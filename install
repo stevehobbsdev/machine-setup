@@ -236,10 +236,25 @@ function main() {
     popd > /dev/null || exit
   fi
 
-  # nvim config
-  if [[ ! -L "$HOME/.config/nvim/init.lua" ]]; then
-    echo "Setting up nvim config..."
-    ln -s "$(pwd)/assets/init.lua" "$HOME/.config/nvim/init.lua"
+  # LazyVim setup
+  if type nvim &> /dev/null; then
+    if [[ ! -d "$HOME/.config/nvim" ]]; then
+      echo "Setting up LazyVim..."
+      # Create nvim config directory
+      mkdir -p "$HOME/.config/nvim"
+      
+      # Clone LazyVim starter template
+      git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
+      
+      # Remove .git directory to make it your own
+      rm -rf "$HOME/.config/nvim/.git"
+      
+      echo "LazyVim has been installed. Run 'nvim' to complete the setup."
+    else
+      echo "Neovim config already exists at ~/.config/nvim"
+    fi
+  else
+    echo "Note: Neovim not installed, skipping LazyVim setup"
   fi
 
   # Optional installation...
