@@ -27,17 +27,47 @@ done
 
 # Install any development tools and programming language tools
 function install-dev() {
-  # Install GitHub CLI
-  if ! type gh &> /dev/null; then
-    echo "Installing GitHub CLI"
-    brew install --quiet gh
+  if [[ "$IS_MACOS" == true ]]; then
+    # Install GitHub CLI
+    if ! type gh &> /dev/null; then
+      echo "Installing GitHub CLI"
+      brew install --quiet gh
+    fi
+
+    brew install --quiet mise libpq docker shellcheck
+
+    mise use -g go@latest
+    mise use -g ruby@latest
+    mise use -g node@latest
+  else
+    echo "Installing development tools for non-macOS system..."
+    
+    # Install GitHub CLI
+    if ! type gh &> /dev/null; then
+      echo "Installing GitHub CLI"
+      if command -v apt-get &> /dev/null; then
+        # Add GitHub CLI repository and install
+        type -p curl >/dev/null || sudo apt-get update && sudo apt-get install curl -y
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt-get update && sudo apt-get install gh -y
+      else
+        echo "Warning: Could not install GitHub CLI automatically on this system"
+      fi
+    fi
+
+    # Install other development tools
+    if command -v apt-get &> /dev/null; then
+      sudo apt-get update
+      sudo apt-get install -y docker.io shellcheck
+      
+      echo "Note: mise, libpq, and language runtimes may need manual installation on this system"
+      echo "Consider installing mise from https://mise.jdx.dev/ for language runtime management"
+    else
+      echo "Warning: Could not install development tools automatically on this system"
+    fi
   fi
-
-  brew install --quiet mise libpq docker shellcheck python pipx
-
-  mise use -g go@latest
-  mise use -g ruby@latest
-  mise use -g node@latest
 }
 
 # Install any applications needed
