@@ -3,6 +3,11 @@
 INSTALL_DEV=false
 INSTALL_APPS=false
 
+# Version constants - update these to pin to specific versions
+GO_VERSION="1.24.6"
+RUBY_VERSION="3.4.5"
+NODE_VERSION="24.5.0"
+
 # Detect OS
 OS="$(uname -s)"
 IS_MACOS=false
@@ -40,9 +45,9 @@ function install-dev() {
 
     # Set up language runtimes
     if type mise &> /dev/null; then
-      mise use -g go@latest
-      mise use -g ruby@latest
-      mise use -g node@latest
+      mise use -g go@${GO_VERSION}
+      mise use -g ruby@${RUBY_VERSION}
+      mise use -g node@${NODE_VERSION}
     fi
   else
     echo "Installing development tools for non-macOS system..."
@@ -103,9 +108,9 @@ function install-dev() {
       
       # Install language runtimes with mise if available
       if type mise &> /dev/null; then
-        mise use -g go@latest
-        mise use -g ruby@latest
-        mise use -g node@latest
+        mise use -g go@${GO_VERSION}
+        mise use -g ruby@${RUBY_VERSION}
+        mise use -g node@${NODE_VERSION}
       else
         echo "Note: Could not install mise, language runtimes need manual installation"
       fi
