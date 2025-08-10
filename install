@@ -180,7 +180,7 @@ function main() {
   if ! type "brew" &> /dev/null; then
     if [[ "$IS_MACOS" == true ]]; then
       echo "Installing homebrew..."
-      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install)"
     else
       echo "Warning: Homebrew installation skipped (not on macOS)"
     fi
