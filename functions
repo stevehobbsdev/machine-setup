@@ -19,3 +19,7 @@ function open-branch {
   echo "Current branch: $BRANCH"
   gh browse -b "$BRANCH"
 }
+
+function current-branch() {
+  git rev-parse --abbrev-ref HEAD
+}
